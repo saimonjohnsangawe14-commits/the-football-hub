@@ -1,5 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { TrendingUp, Users, DollarSign, Activity, Clock } from "lucide-react";
+import { TrendingUp, Users, DollarSign, Activity } from "lucide-react";
+import {
+  Bar, BarChart, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis,
+} from "recharts";
 import { adminMetrics, teamLeaderboard } from "@/lib/mock-data";
 import { PageHeader, SectionTitle, Stat, Pill } from "@/components/ui-bits";
 
@@ -8,8 +11,14 @@ export const Route = createFileRoute("/admin")({
   component: AdminPage,
 });
 
+const PRIMARY = "hsl(var(--primary))";
+const ACCENT = "hsl(var(--accent))";
+const MUTED = "hsl(var(--muted-foreground))";
+
 function AdminPage() {
   const totalRev = adminMetrics.revenueBreakdown.reduce((a, b) => a + b.value, 0);
+  const peakData = adminMetrics.peakHours.map((h) => ({ ...h, label: h.hour.slice(0, 2) }));
+  const pieData = adminMetrics.revenueBreakdown.map((r) => ({ name: r.label, value: r.value, fill: r.color === "primary" ? PRIMARY : ACCENT }));
 
   return (
     <div className="space-y-5">
@@ -35,47 +44,64 @@ function AdminPage() {
         <Stat label="Retention" value={`${adminMetrics.retention}%`} hint="90-day" />
       </section>
 
-      {/* Peak hours */}
+      {/* Peak hours bar chart */}
       <section className="rounded-2xl border border-border bg-surface p-4">
         <div className="flex items-center justify-between">
           <div className="font-display text-sm font-bold uppercase tracking-wider">Peak hours · today</div>
           <Pill tone="primary">Live</Pill>
         </div>
-        <div className="mt-4 flex h-32 items-end gap-1.5">
-          {adminMetrics.peakHours.map((h) => (
-            <div key={h.hour} className="flex flex-1 flex-col items-center gap-1">
-              <div
-                className={"w-full rounded-t-md " + (h.pct >= 90 ? "gradient-primary" : h.pct >= 60 ? "bg-accent" : "bg-muted")}
-                style={{ height: `${h.pct}%` }}
+        <div className="mt-3 h-44">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={peakData} margin={{ top: 8, right: 4, left: -24, bottom: 0 }}>
+              <XAxis dataKey="label" stroke={MUTED} fontSize={10} tickLine={false} axisLine={false} />
+              <YAxis stroke={MUTED} fontSize={10} tickLine={false} axisLine={false} domain={[0, 100]} tickFormatter={(v) => `${v}%`} />
+              <Tooltip
+                cursor={{ fill: "hsl(var(--muted))", opacity: 0.4 }}
+                contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 12, fontSize: 12 }}
+                formatter={(v: number) => [`${v}% full`, "Occupancy"]}
+                labelFormatter={(l) => `${l}:00`}
               />
-              <span className="text-[9px] text-muted-foreground">{h.hour.slice(0, 2)}</span>
-            </div>
-          ))}
+              <Bar dataKey="pct" radius={[6, 6, 0, 0]}>
+                {peakData.map((h, i) => (
+                  <Cell key={i} fill={h.pct >= 90 ? PRIMARY : h.pct >= 60 ? ACCENT : "hsl(var(--muted))"} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       </section>
 
-      {/* Revenue breakdown */}
+      {/* Revenue mix pie chart */}
       <section className="rounded-2xl border border-border bg-surface p-4">
-        <div className="font-display text-sm font-bold uppercase tracking-wider">Revenue mix · 7d</div>
-        <div className="mt-3 flex h-2.5 overflow-hidden rounded-full">
-          {adminMetrics.revenueBreakdown.map((r, i) => (
-            <div
-              key={i}
-              className={r.color === "primary" ? "gradient-primary" : "gradient-accent"}
-              style={{ width: `${(r.value / totalRev) * 100}%` }}
-            />
-          ))}
+        <div className="flex items-center justify-between">
+          <div className="font-display text-sm font-bold uppercase tracking-wider">Revenue mix · 7d</div>
+          <span className="font-display text-sm font-bold">AED {totalRev.toLocaleString()}</span>
         </div>
-        <div className="mt-3 space-y-2">
-          {adminMetrics.revenueBreakdown.map((r, i) => (
-            <div key={i} className="flex items-center justify-between text-sm">
-              <span className="inline-flex items-center gap-2">
-                <span className={"h-2 w-2 rounded-full " + (r.color === "primary" ? "bg-primary" : "bg-accent")} />
-                <span className="text-muted-foreground">{r.label}</span>
-              </span>
-              <span className="font-display font-bold">AED {r.value.toLocaleString()}</span>
-            </div>
-          ))}
+        <div className="mt-2 grid grid-cols-[120px_1fr] items-center gap-3">
+          <div className="h-32">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie data={pieData} dataKey="value" innerRadius={32} outerRadius={56} paddingAngle={2} stroke="hsl(var(--card))" strokeWidth={2}>
+                  {pieData.map((d, i) => <Cell key={i} fill={d.fill} />)}
+                </Pie>
+                <Tooltip
+                  contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 12, fontSize: 12 }}
+                  formatter={(v: number, n) => [`AED ${v.toLocaleString()}`, n]}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="space-y-2">
+            {adminMetrics.revenueBreakdown.map((r, i) => (
+              <div key={i} className="flex items-center justify-between text-xs">
+                <span className="inline-flex items-center gap-2">
+                  <span className={"h-2 w-2 rounded-full " + (r.color === "primary" ? "bg-primary" : "bg-accent")} />
+                  <span className="text-muted-foreground">{r.label}</span>
+                </span>
+                <span className="font-display font-bold">{Math.round((r.value / totalRev) * 100)}%</span>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -98,7 +124,7 @@ function AdminPage() {
 
       {/* Staff */}
       <section>
-        <SectionTitle title="Staff on shift" action={<span className="text-xs font-semibold text-primary">+ Add</span>} />
+        <SectionTitle title="Staff on shift" />
         <div className="overflow-hidden rounded-2xl border border-border bg-surface">
           {adminMetrics.staff.map((s, i) => (
             <div key={s.name} className={"flex items-center gap-3 p-3 " + (i > 0 ? "border-t border-border" : "")}>
