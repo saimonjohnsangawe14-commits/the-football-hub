@@ -1,9 +1,17 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
+import { toast } from "sonner";
 import {
   Home, CalendarDays, Users, Trophy, User2, Menu, Bell, Sun, Moon, X,
   Video, GraduationCap, Building2, ShoppingBag, UtensilsCrossed, LayoutDashboard,
+  Check, CalendarClock, MessageSquare,
 } from "lucide-react";
+
+const notifications = [
+  { icon: Trophy, title: "You won MVP last night", desc: "Desert Wolves 4 – 2 Falcon FC · 2h ago", tone: "primary" as const },
+  { icon: CalendarClock, title: "Booking reminder", desc: "Pitch 2 · 7v7 tomorrow at 20:00 · 5h ago", tone: "accent" as const },
+  { icon: MessageSquare, title: "Coach Diego invited you", desc: "Join the Summer Cup squad · 1d ago", tone: "primary" as const },
+];
 
 const primaryNav = [
   { to: "/", label: "Home", icon: Home },
@@ -32,6 +40,7 @@ export function AppShell({
   onToggleTheme: () => void;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   return (
@@ -57,7 +66,11 @@ export function AppShell({
             >
               {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </button>
-            <button className="relative grid h-9 w-9 place-items-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground" aria-label="Notifications">
+            <button
+              onClick={() => setNotifOpen(true)}
+              className="relative grid h-9 w-9 place-items-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
+              aria-label="Notifications"
+            >
               <Bell className="h-4 w-4" />
               <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-primary" />
             </button>
@@ -147,6 +160,52 @@ export function AppShell({
                       <span className="block truncate text-xs text-muted-foreground">{item.desc}</span>
                     </span>
                   </Link>
+                );
+              })}
+            </div>
+            <div className="mt-4 h-1.5 w-12 mx-auto rounded-full bg-muted" />
+          </div>
+        </div>
+      )}
+
+      {/* Notifications sheet */}
+      {notifOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-foreground/40 backdrop-blur-sm"
+          onClick={() => setNotifOpen(false)}
+        >
+          <div
+            className="absolute inset-x-0 bottom-0 mx-auto max-w-2xl rounded-t-3xl border-t border-border bg-card p-5 shadow-elevated"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="mb-4 flex items-center justify-between">
+              <div>
+                <div className="font-display text-lg font-bold">Notifications</div>
+                <div className="text-xs text-muted-foreground">3 new this week</div>
+              </div>
+              <button
+                onClick={() => {
+                  toast.success("All caught up", { description: "Notifications marked as read." });
+                  setNotifOpen(false);
+                }}
+                className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary"
+              >
+                <Check className="h-3 w-3" /> Mark read
+              </button>
+            </div>
+            <div className="grid gap-2">
+              {notifications.map((n, i) => {
+                const Icon = n.icon;
+                return (
+                  <div key={i} className="flex items-start gap-3 rounded-2xl border border-border bg-surface p-3">
+                    <span className={"grid h-9 w-9 shrink-0 place-items-center rounded-xl " + (n.tone === "primary" ? "bg-primary/15 text-primary" : "bg-accent/15 text-accent")}>
+                      <Icon className="h-4 w-4" />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate text-sm font-semibold">{n.title}</div>
+                      <div className="truncate text-xs text-muted-foreground">{n.desc}</div>
+                    </div>
+                  </div>
                 );
               })}
             </div>

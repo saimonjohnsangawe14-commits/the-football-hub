@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Video, Download, Share2, Play, Sparkles } from "lucide-react";
+import { toast } from "sonner";
 import { recordings } from "@/lib/mock-data";
 import { PageHeader, SectionTitle, Pill } from "@/components/ui-bits";
 
@@ -23,10 +24,16 @@ function MatchesPage() {
           <h2 className="mt-2 font-display text-xl font-bold leading-tight">Book a videographer for your next match</h2>
           <p className="mt-1 text-xs text-white/70">Multi-cam, drone & AI-generated highlight reels — delivered within 24 hrs.</p>
           <div className="mt-3 flex gap-2">
-            <button className="rounded-full gradient-primary px-4 py-2 text-xs font-semibold text-primary-foreground shadow-glow">
+            <button
+              onClick={() => toast.success("Shoot requested", { description: "Our videographer will confirm within 1h." })}
+              className="rounded-full gradient-primary px-4 py-2 text-xs font-semibold text-primary-foreground shadow-glow"
+            >
               Request shoot
             </button>
-            <button className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold backdrop-blur">
+            <button
+              onClick={() => toast.info("Packages opened below", { description: "Clips, Highlight reel, and Full-match edits." })}
+              className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold backdrop-blur"
+            >
               See packages
             </button>
           </div>

@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Share2, Settings, Trophy, Target, Zap, Activity } from "lucide-react";
+import { toast } from "sonner";
 import { currentUser, playerStats, badges, playerLeaderboard } from "@/lib/mock-data";
 import { PageHeader, SectionTitle, Avatar, Pill, Stat } from "@/components/ui-bits";
 
@@ -9,14 +10,29 @@ export const Route = createFileRoute("/profile")({
 });
 
 function ProfilePage() {
+  const handleShare = async () => {
+    const url = typeof window !== "undefined" ? window.location.href : "";
+    const shareData = { title: `${currentUser.name} on Strikr`, text: `Check out my Strikr profile — Lvl ${currentUser.level} · Rating ${currentUser.rating}`, url };
+    try {
+      if (typeof navigator !== "undefined" && navigator.share) {
+        await navigator.share(shareData);
+      } else if (typeof navigator !== "undefined" && navigator.clipboard) {
+        await navigator.clipboard.writeText(url);
+        toast.success("Profile link copied");
+      }
+    } catch {
+      /* user dismissed */
+    }
+  };
+
   return (
     <div className="space-y-5">
       <PageHeader
         title="Player profile"
         action={
           <div className="flex gap-1">
-            <button className="grid h-9 w-9 place-items-center rounded-full bg-muted text-muted-foreground"><Share2 className="h-4 w-4" /></button>
-            <button className="grid h-9 w-9 place-items-center rounded-full bg-muted text-muted-foreground"><Settings className="h-4 w-4" /></button>
+            <button onClick={handleShare} aria-label="Share profile" className="grid h-9 w-9 place-items-center rounded-full bg-muted text-muted-foreground hover:text-foreground"><Share2 className="h-4 w-4" /></button>
+            <button onClick={() => toast.info("Settings coming soon", { description: "Account, preferences, and privacy controls." })} aria-label="Settings" className="grid h-9 w-9 place-items-center rounded-full bg-muted text-muted-foreground hover:text-foreground"><Settings className="h-4 w-4" /></button>
           </div>
         }
       />
