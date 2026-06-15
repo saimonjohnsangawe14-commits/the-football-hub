@@ -14,7 +14,107 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      shoot_requests: {
+        Row: {
+          contact: string
+          created_at: string
+          id: string
+          match_date: string
+          match_name: string
+          notes: string | null
+          package: string
+          status: string
+        }
+        Insert: {
+          contact: string
+          created_at?: string
+          id?: string
+          match_date: string
+          match_name: string
+          notes?: string | null
+          package: string
+          status?: string
+        }
+        Update: {
+          contact?: string
+          created_at?: string
+          id?: string
+          match_date?: string
+          match_name?: string
+          notes?: string | null
+          package?: string
+          status?: string
+        }
+        Relationships: []
+      }
+      team_invites: {
+        Row: {
+          contact: string
+          created_at: string
+          id: string
+          player_name: string
+          position: string | null
+          status: string
+          team_id: string | null
+          team_name: string
+        }
+        Insert: {
+          contact: string
+          created_at?: string
+          id?: string
+          player_name: string
+          position?: string | null
+          status?: string
+          team_id?: string | null
+          team_name: string
+        }
+        Update: {
+          contact?: string
+          created_at?: string
+          id?: string
+          player_name?: string
+          position?: string | null
+          status?: string
+          team_id?: string | null
+          team_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_invites_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      teams: {
+        Row: {
+          captain: string | null
+          created_at: string
+          emoji: string
+          format: string
+          id: string
+          name: string
+        }
+        Insert: {
+          captain?: string | null
+          created_at?: string
+          emoji?: string
+          format: string
+          id?: string
+          name: string
+        }
+        Update: {
+          captain?: string | null
+          created_at?: string
+          emoji?: string
+          format?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
