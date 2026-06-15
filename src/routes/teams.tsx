@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Plus, Crown, Trophy, TrendingUp, UserPlus } from "lucide-react";
+import { toast } from "sonner";
 import { myTeam, teamLeaderboard } from "@/lib/mock-data";
 import { PageHeader, SectionTitle, Avatar, Pill, Stat } from "@/components/ui-bits";
 
@@ -18,7 +19,10 @@ function TeamsPage() {
         title="Teams"
         subtitle="Your squad, your rivals, your rankings"
         action={
-          <button className="inline-flex items-center gap-1 rounded-full gradient-primary px-3 py-2 text-xs font-semibold text-primary-foreground shadow-glow">
+          <button
+            onClick={() => toast.success("Team created", { description: "Set up your roster in the new team." })}
+            className="inline-flex items-center gap-1 rounded-full gradient-primary px-3 py-2 text-xs font-semibold text-primary-foreground shadow-glow"
+          >
             <Plus className="h-3.5 w-3.5" /> New
           </button>
         }
@@ -57,7 +61,10 @@ function TeamsPage() {
         <SectionTitle
           title="Squad"
           action={
-            <button className="inline-flex items-center gap-1 text-xs font-semibold text-primary">
+            <button
+              onClick={() => toast.success("Invite link copied", { description: "Share it with your player to join the squad." })}
+              className="inline-flex items-center gap-1 text-xs font-semibold text-primary"
+            >
               <UserPlus className="h-3.5 w-3.5" /> Invite
             </button>
           }
