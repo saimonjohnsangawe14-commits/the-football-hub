@@ -11,9 +11,9 @@ export const Route = createFileRoute("/admin")({
   component: AdminPage,
 });
 
-const PRIMARY = "hsl(var(--primary))";
-const ACCENT = "hsl(var(--accent))";
-const MUTED = "hsl(var(--muted-foreground))";
+const PRIMARY = "var(--primary)";
+const ACCENT = "var(--accent)";
+const MUTED = "var(--muted-foreground)";
 
 function AdminPage() {
   const totalRev = adminMetrics.revenueBreakdown.reduce((a, b) => a + b.value, 0);
@@ -56,14 +56,14 @@ function AdminPage() {
               <XAxis dataKey="label" stroke={MUTED} fontSize={10} tickLine={false} axisLine={false} />
               <YAxis stroke={MUTED} fontSize={10} tickLine={false} axisLine={false} domain={[0, 100]} tickFormatter={(v) => `${v}%`} />
               <Tooltip
-                cursor={{ fill: "hsl(var(--muted))", opacity: 0.4 }}
-                contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 12, fontSize: 12 }}
+                cursor={{ fill: "var(--muted)", opacity: 0.4 }}
+                contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, fontSize: 12 }}
                 formatter={(v: number) => [`${v}% full`, "Occupancy"]}
                 labelFormatter={(l) => `${l}:00`}
               />
               <Bar dataKey="pct" radius={[6, 6, 0, 0]}>
                 {peakData.map((h, i) => (
-                  <Cell key={i} fill={h.pct >= 90 ? PRIMARY : h.pct >= 60 ? ACCENT : "hsl(var(--muted))"} />
+                  <Cell key={i} fill={h.pct >= 90 ? PRIMARY : h.pct >= 60 ? ACCENT : "var(--muted)"} />
                 ))}
               </Bar>
             </BarChart>
@@ -81,11 +81,11 @@ function AdminPage() {
           <div className="h-32">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
-                <Pie data={pieData} dataKey="value" innerRadius={32} outerRadius={56} paddingAngle={2} stroke="hsl(var(--card))" strokeWidth={2}>
+                <Pie data={pieData} dataKey="value" innerRadius={32} outerRadius={56} paddingAngle={2} stroke="var(--card)" strokeWidth={2}>
                   {pieData.map((d, i) => <Cell key={i} fill={d.fill} />)}
                 </Pie>
                 <Tooltip
-                  contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 12, fontSize: 12 }}
+                  contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, fontSize: 12 }}
                   formatter={(v: number, n) => [`AED ${v.toLocaleString()}`, n]}
                 />
               </PieChart>
