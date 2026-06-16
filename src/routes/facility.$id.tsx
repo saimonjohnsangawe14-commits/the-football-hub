@@ -92,7 +92,7 @@ function FacilityPage() {
         {/* Amenities */}
         <Section title="Amenities">
           <div className="flex flex-wrap gap-2">
-            {f.amenities.map((a) => (
+            {f.amenities.map((a: string) => (
               <span key={a} className="rounded-full border border-border bg-surface px-3 py-1.5 text-xs font-semibold text-foreground">
                 {amenityLabels[a] ?? a}
               </span>
