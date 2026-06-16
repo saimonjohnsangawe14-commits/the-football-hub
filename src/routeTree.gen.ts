@@ -10,11 +10,45 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as OwnerRouteImport } from './routes/owner'
+import { Route as ExploreRouteImport } from './routes/explore'
+import { Route as CommunityRouteImport } from './routes/community'
+import { Route as BookingsRouteImport } from './routes/bookings'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as OwnerIndexRouteImport } from './routes/owner.index'
+import { Route as OwnerStaffRouteImport } from './routes/owner.staff'
+import { Route as OwnerSlotsRouteImport } from './routes/owner.slots'
+import { Route as OwnerPromotionsRouteImport } from './routes/owner.promotions'
+import { Route as OwnerOnboardingRouteImport } from './routes/owner.onboarding'
+import { Route as OwnerFinanceRouteImport } from './routes/owner.finance'
+import { Route as OwnerFacilityRouteImport } from './routes/owner.facility'
+import { Route as OwnerBookingsRouteImport } from './routes/owner.bookings'
+import { Route as FacilityIdRouteImport } from './routes/facility.$id'
+import { Route as BookFacilityIdRouteImport } from './routes/book.$facilityId'
 
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OwnerRoute = OwnerRouteImport.update({
+  id: '/owner',
+  path: '/owner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExploreRoute = ExploreRouteImport.update({
+  id: '/explore',
+  path: '/explore',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommunityRoute = CommunityRouteImport.update({
+  id: '/community',
+  path: '/community',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookingsRoute = BookingsRouteImport.update({
+  id: '/bookings',
+  path: '/bookings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -22,31 +56,176 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OwnerIndexRoute = OwnerIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => OwnerRoute,
+} as any)
+const OwnerStaffRoute = OwnerStaffRouteImport.update({
+  id: '/staff',
+  path: '/staff',
+  getParentRoute: () => OwnerRoute,
+} as any)
+const OwnerSlotsRoute = OwnerSlotsRouteImport.update({
+  id: '/slots',
+  path: '/slots',
+  getParentRoute: () => OwnerRoute,
+} as any)
+const OwnerPromotionsRoute = OwnerPromotionsRouteImport.update({
+  id: '/promotions',
+  path: '/promotions',
+  getParentRoute: () => OwnerRoute,
+} as any)
+const OwnerOnboardingRoute = OwnerOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => OwnerRoute,
+} as any)
+const OwnerFinanceRoute = OwnerFinanceRouteImport.update({
+  id: '/finance',
+  path: '/finance',
+  getParentRoute: () => OwnerRoute,
+} as any)
+const OwnerFacilityRoute = OwnerFacilityRouteImport.update({
+  id: '/facility',
+  path: '/facility',
+  getParentRoute: () => OwnerRoute,
+} as any)
+const OwnerBookingsRoute = OwnerBookingsRouteImport.update({
+  id: '/bookings',
+  path: '/bookings',
+  getParentRoute: () => OwnerRoute,
+} as any)
+const FacilityIdRoute = FacilityIdRouteImport.update({
+  id: '/facility/$id',
+  path: '/facility/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookFacilityIdRoute = BookFacilityIdRouteImport.update({
+  id: '/book/$facilityId',
+  path: '/book/$facilityId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/bookings': typeof BookingsRoute
+  '/community': typeof CommunityRoute
+  '/explore': typeof ExploreRoute
+  '/owner': typeof OwnerRouteWithChildren
   '/profile': typeof ProfileRoute
+  '/book/$facilityId': typeof BookFacilityIdRoute
+  '/facility/$id': typeof FacilityIdRoute
+  '/owner/bookings': typeof OwnerBookingsRoute
+  '/owner/facility': typeof OwnerFacilityRoute
+  '/owner/finance': typeof OwnerFinanceRoute
+  '/owner/onboarding': typeof OwnerOnboardingRoute
+  '/owner/promotions': typeof OwnerPromotionsRoute
+  '/owner/slots': typeof OwnerSlotsRoute
+  '/owner/staff': typeof OwnerStaffRoute
+  '/owner/': typeof OwnerIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/bookings': typeof BookingsRoute
+  '/community': typeof CommunityRoute
+  '/explore': typeof ExploreRoute
   '/profile': typeof ProfileRoute
+  '/book/$facilityId': typeof BookFacilityIdRoute
+  '/facility/$id': typeof FacilityIdRoute
+  '/owner/bookings': typeof OwnerBookingsRoute
+  '/owner/facility': typeof OwnerFacilityRoute
+  '/owner/finance': typeof OwnerFinanceRoute
+  '/owner/onboarding': typeof OwnerOnboardingRoute
+  '/owner/promotions': typeof OwnerPromotionsRoute
+  '/owner/slots': typeof OwnerSlotsRoute
+  '/owner/staff': typeof OwnerStaffRoute
+  '/owner': typeof OwnerIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/bookings': typeof BookingsRoute
+  '/community': typeof CommunityRoute
+  '/explore': typeof ExploreRoute
+  '/owner': typeof OwnerRouteWithChildren
   '/profile': typeof ProfileRoute
+  '/book/$facilityId': typeof BookFacilityIdRoute
+  '/facility/$id': typeof FacilityIdRoute
+  '/owner/bookings': typeof OwnerBookingsRoute
+  '/owner/facility': typeof OwnerFacilityRoute
+  '/owner/finance': typeof OwnerFinanceRoute
+  '/owner/onboarding': typeof OwnerOnboardingRoute
+  '/owner/promotions': typeof OwnerPromotionsRoute
+  '/owner/slots': typeof OwnerSlotsRoute
+  '/owner/staff': typeof OwnerStaffRoute
+  '/owner/': typeof OwnerIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/profile'
+  fullPaths:
+    | '/'
+    | '/bookings'
+    | '/community'
+    | '/explore'
+    | '/owner'
+    | '/profile'
+    | '/book/$facilityId'
+    | '/facility/$id'
+    | '/owner/bookings'
+    | '/owner/facility'
+    | '/owner/finance'
+    | '/owner/onboarding'
+    | '/owner/promotions'
+    | '/owner/slots'
+    | '/owner/staff'
+    | '/owner/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/profile'
-  id: '__root__' | '/' | '/profile'
+  to:
+    | '/'
+    | '/bookings'
+    | '/community'
+    | '/explore'
+    | '/profile'
+    | '/book/$facilityId'
+    | '/facility/$id'
+    | '/owner/bookings'
+    | '/owner/facility'
+    | '/owner/finance'
+    | '/owner/onboarding'
+    | '/owner/promotions'
+    | '/owner/slots'
+    | '/owner/staff'
+    | '/owner'
+  id:
+    | '__root__'
+    | '/'
+    | '/bookings'
+    | '/community'
+    | '/explore'
+    | '/owner'
+    | '/profile'
+    | '/book/$facilityId'
+    | '/facility/$id'
+    | '/owner/bookings'
+    | '/owner/facility'
+    | '/owner/finance'
+    | '/owner/onboarding'
+    | '/owner/promotions'
+    | '/owner/slots'
+    | '/owner/staff'
+    | '/owner/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BookingsRoute: typeof BookingsRoute
+  CommunityRoute: typeof CommunityRoute
+  ExploreRoute: typeof ExploreRoute
+  OwnerRoute: typeof OwnerRouteWithChildren
   ProfileRoute: typeof ProfileRoute
+  BookFacilityIdRoute: typeof BookFacilityIdRoute
+  FacilityIdRoute: typeof FacilityIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -58,6 +237,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/owner': {
+      id: '/owner'
+      path: '/owner'
+      fullPath: '/owner'
+      preLoaderRoute: typeof OwnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/explore': {
+      id: '/explore'
+      path: '/explore'
+      fullPath: '/explore'
+      preLoaderRoute: typeof ExploreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/community': {
+      id: '/community'
+      path: '/community'
+      fullPath: '/community'
+      preLoaderRoute: typeof CommunityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bookings': {
+      id: '/bookings'
+      path: '/bookings'
+      fullPath: '/bookings'
+      preLoaderRoute: typeof BookingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -65,12 +272,112 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/owner/': {
+      id: '/owner/'
+      path: '/'
+      fullPath: '/owner/'
+      preLoaderRoute: typeof OwnerIndexRouteImport
+      parentRoute: typeof OwnerRoute
+    }
+    '/owner/staff': {
+      id: '/owner/staff'
+      path: '/staff'
+      fullPath: '/owner/staff'
+      preLoaderRoute: typeof OwnerStaffRouteImport
+      parentRoute: typeof OwnerRoute
+    }
+    '/owner/slots': {
+      id: '/owner/slots'
+      path: '/slots'
+      fullPath: '/owner/slots'
+      preLoaderRoute: typeof OwnerSlotsRouteImport
+      parentRoute: typeof OwnerRoute
+    }
+    '/owner/promotions': {
+      id: '/owner/promotions'
+      path: '/promotions'
+      fullPath: '/owner/promotions'
+      preLoaderRoute: typeof OwnerPromotionsRouteImport
+      parentRoute: typeof OwnerRoute
+    }
+    '/owner/onboarding': {
+      id: '/owner/onboarding'
+      path: '/onboarding'
+      fullPath: '/owner/onboarding'
+      preLoaderRoute: typeof OwnerOnboardingRouteImport
+      parentRoute: typeof OwnerRoute
+    }
+    '/owner/finance': {
+      id: '/owner/finance'
+      path: '/finance'
+      fullPath: '/owner/finance'
+      preLoaderRoute: typeof OwnerFinanceRouteImport
+      parentRoute: typeof OwnerRoute
+    }
+    '/owner/facility': {
+      id: '/owner/facility'
+      path: '/facility'
+      fullPath: '/owner/facility'
+      preLoaderRoute: typeof OwnerFacilityRouteImport
+      parentRoute: typeof OwnerRoute
+    }
+    '/owner/bookings': {
+      id: '/owner/bookings'
+      path: '/bookings'
+      fullPath: '/owner/bookings'
+      preLoaderRoute: typeof OwnerBookingsRouteImport
+      parentRoute: typeof OwnerRoute
+    }
+    '/facility/$id': {
+      id: '/facility/$id'
+      path: '/facility/$id'
+      fullPath: '/facility/$id'
+      preLoaderRoute: typeof FacilityIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/book/$facilityId': {
+      id: '/book/$facilityId'
+      path: '/book/$facilityId'
+      fullPath: '/book/$facilityId'
+      preLoaderRoute: typeof BookFacilityIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface OwnerRouteChildren {
+  OwnerBookingsRoute: typeof OwnerBookingsRoute
+  OwnerFacilityRoute: typeof OwnerFacilityRoute
+  OwnerFinanceRoute: typeof OwnerFinanceRoute
+  OwnerOnboardingRoute: typeof OwnerOnboardingRoute
+  OwnerPromotionsRoute: typeof OwnerPromotionsRoute
+  OwnerSlotsRoute: typeof OwnerSlotsRoute
+  OwnerStaffRoute: typeof OwnerStaffRoute
+  OwnerIndexRoute: typeof OwnerIndexRoute
+}
+
+const OwnerRouteChildren: OwnerRouteChildren = {
+  OwnerBookingsRoute: OwnerBookingsRoute,
+  OwnerFacilityRoute: OwnerFacilityRoute,
+  OwnerFinanceRoute: OwnerFinanceRoute,
+  OwnerOnboardingRoute: OwnerOnboardingRoute,
+  OwnerPromotionsRoute: OwnerPromotionsRoute,
+  OwnerSlotsRoute: OwnerSlotsRoute,
+  OwnerStaffRoute: OwnerStaffRoute,
+  OwnerIndexRoute: OwnerIndexRoute,
+}
+
+const OwnerRouteWithChildren = OwnerRoute._addFileChildren(OwnerRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BookingsRoute: BookingsRoute,
+  CommunityRoute: CommunityRoute,
+  ExploreRoute: ExploreRoute,
+  OwnerRoute: OwnerRouteWithChildren,
   ProfileRoute: ProfileRoute,
+  BookFacilityIdRoute: BookFacilityIdRoute,
+  FacilityIdRoute: FacilityIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
