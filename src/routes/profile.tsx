@@ -1,151 +1,108 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Share2, Settings, Trophy, Target, Zap, Activity } from "lucide-react";
+import { Settings2, Share2, LogOut, ChevronRight, CreditCard, Heart, Bell, Building2, HelpCircle, Wallet } from "lucide-react";
 import { toast } from "sonner";
-import { currentUser, playerStats, badges, playerLeaderboard } from "@/lib/mock-data";
-import { PageHeader, SectionTitle, Avatar, Pill, Stat } from "@/components/ui-bits";
+import { currentUser, myBookings } from "@/lib/mock-data";
+import { PageHeader, Stat } from "@/components/ui-bits";
 
 export const Route = createFileRoute("/profile")({
-  head: () => ({ meta: [{ title: "Profile · Strikr" }, { name: "description", content: "Track goals, assists, MVPs and badges." }] }),
+  head: () => ({ meta: [{ title: "Profile · Strikr" }] }),
   component: ProfilePage,
 });
 
+const menu = [
+  { label: "Saved facilities", icon: Heart, to: "/explore" as const },
+  { label: "Payment methods", icon: CreditCard, action: () => toast.info("Payment methods coming soon") },
+  { label: "Notification settings", icon: Bell, action: () => toast.success("Notifications enabled") },
+  { label: "Become a facility owner", icon: Building2, to: "/owner/onboarding" as const },
+  { label: "Help & support", icon: HelpCircle, action: () => toast.info("Email support@strikr.app") },
+];
+
 function ProfilePage() {
-  const handleShare = async () => {
-    const url = typeof window !== "undefined" ? window.location.href : "";
-    const shareData = { title: `${currentUser.name} on Strikr`, text: `Check out my Strikr profile — Lvl ${currentUser.level} · Rating ${currentUser.rating}`, url };
+  const upcoming = myBookings.filter((b) => b.status === "Upcoming").length;
+  const completed = myBookings.filter((b) => b.status === "Completed").length;
+
+  const share = async () => {
     try {
-      if (typeof navigator !== "undefined" && navigator.share) {
-        await navigator.share(shareData);
-      } else if (typeof navigator !== "undefined" && navigator.clipboard) {
-        await navigator.clipboard.writeText(url);
-        toast.success("Profile link copied");
-      }
-    } catch {
-      /* user dismissed */
-    }
+      if (navigator.share) await navigator.share({ title: "Strikr", url: window.location.origin });
+      else { await navigator.clipboard.writeText(window.location.origin); toast.success("Link copied"); }
+    } catch { /* cancelled */ }
   };
 
   return (
     <div className="space-y-5">
       <PageHeader
-        title="Player profile"
+        title="Profile"
         action={
           <div className="flex gap-1">
-            <button onClick={handleShare} aria-label="Share profile" className="grid h-9 w-9 place-items-center rounded-full bg-muted text-muted-foreground hover:text-foreground"><Share2 className="h-4 w-4" /></button>
-            <button onClick={() => toast.info("Settings coming soon", { description: "Account, preferences, and privacy controls." })} aria-label="Settings" className="grid h-9 w-9 place-items-center rounded-full bg-muted text-muted-foreground hover:text-foreground"><Settings className="h-4 w-4" /></button>
+            <button onClick={share} className="grid h-9 w-9 place-items-center rounded-full bg-muted text-muted-foreground">
+              <Share2 className="h-4 w-4" />
+            </button>
+            <button onClick={() => toast.success("Settings opened")} className="grid h-9 w-9 place-items-center rounded-full bg-muted text-muted-foreground">
+              <Settings2 className="h-4 w-4" />
+            </button>
           </div>
         }
       />
 
-      {/* Hero card */}
-      <section className="relative overflow-hidden rounded-3xl gradient-hero p-5 text-white shadow-elevated">
-        <div className="absolute inset-0 gradient-mesh opacity-70" />
-        <div className="relative flex items-center gap-4">
-          <div className="relative">
-            <Avatar initials={currentUser.avatar} size={72} tone="primary" />
-            <span className="absolute -bottom-1 -right-1 rounded-full bg-background px-2 py-0.5 font-display text-[10px] font-bold text-foreground shadow">
-              LVL {currentUser.level}
-            </span>
+      {/* Identity */}
+      <div className="rounded-3xl border border-border bg-surface p-4">
+        <div className="flex items-center gap-3">
+          <div className="grid h-16 w-16 place-items-center rounded-2xl gradient-primary font-display text-xl font-bold text-primary-foreground shadow-glow">
+            {currentUser.avatar}
           </div>
           <div className="min-w-0 flex-1">
-            <div className="font-display text-2xl font-bold leading-tight">{currentUser.name}</div>
-            <div className="text-xs text-white/70">{currentUser.handle} · {currentUser.team}</div>
-            <div className="mt-2 inline-flex items-center gap-2 rounded-full bg-white/10 px-2.5 py-1 backdrop-blur">
-              <span className="font-display text-xs font-bold text-primary">{currentUser.position}</span>
-              <span className="h-3 w-px bg-white/20" />
-              <span className="font-mono text-xs font-bold">{currentUser.rating}</span>
-            </div>
+            <div className="truncate font-display text-lg font-bold">{currentUser.name}</div>
+            <div className="text-xs text-muted-foreground">{currentUser.handle} · {currentUser.city}</div>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Career stats */}
-      <section className="grid grid-cols-2 gap-2">
-        <Stat label="Matches" value={playerStats.matches} accent />
-        <Stat label="Goals" value={playerStats.goals} accent />
-        <Stat label="Assists" value={playerStats.assists} />
-        <Stat label="MVPs" value={playerStats.mvp} />
-      </section>
+      <div className="grid grid-cols-3 gap-2">
+        <Stat label="Upcoming" value={upcoming} accent />
+        <Stat label="Played" value={completed} />
+        <Stat label="Wallet" value="AED 240" hint="Strikr credit" />
+      </div>
 
-      {/* Skill bars */}
-      <section className="rounded-2xl border border-border bg-surface p-4">
-        <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Performance</div>
-        <div className="mt-3 space-y-3">
-          {[
-            { label: "Pass accuracy", value: playerStats.passAccuracy, icon: Target },
-            { label: "Shot accuracy", value: playerStats.shotAccuracy, icon: Zap },
-            { label: "Stamina", value: 78, icon: Activity },
-          ].map((s) => {
-            const Icon = s.icon;
-            return (
-              <div key={s.label}>
-                <div className="flex items-center justify-between text-xs">
-                  <span className="inline-flex items-center gap-1.5 font-semibold"><Icon className="h-3 w-3 text-primary" /> {s.label}</span>
-                  <span className="font-mono font-bold">{s.value}%</span>
-                </div>
-                <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-muted">
-                  <div className="h-full gradient-primary" style={{ width: `${s.value}%` }} />
-                </div>
-              </div>
-            );
-          })}
+      <Link
+        to="/owner"
+        className="flex items-center gap-3 rounded-3xl border border-primary/30 bg-primary/5 p-4 shadow-glow"
+      >
+        <span className="grid h-10 w-10 place-items-center rounded-xl gradient-primary text-primary-foreground"><Building2 className="h-4 w-4" /></span>
+        <div className="min-w-0 flex-1">
+          <div className="text-sm font-semibold">Switch to Owner view</div>
+          <div className="text-[11px] text-muted-foreground">Manage your facility, bookings & revenue</div>
         </div>
+        <ChevronRight className="h-4 w-4 text-primary" />
+      </Link>
 
-        <div className="mt-4">
-          <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Last 5</div>
-          <div className="mt-2 flex gap-1.5">
-            {playerStats.formLast5.map((r, i) => (
-              <span
-                key={i}
-                className={
-                  "grid h-8 w-8 place-items-center rounded-lg font-display text-xs font-bold " +
-                  (r === "W" ? "bg-success/20 text-success" : r === "D" ? "bg-warning/20 text-warning" : "bg-destructive/20 text-destructive")
-                }
-              >
-                {r}
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Badges */}
-      <section>
-        <SectionTitle title="Achievements" />
-        <div className="grid grid-cols-3 gap-2">
-          {badges.map((b) => (
-            <div
-              key={b.id}
-              className={
-                "rounded-2xl border p-3 text-center transition-all " +
-                (b.unlocked ? "border-primary/30 bg-primary/5" : "border-border bg-surface opacity-50")
-              }
-            >
-              <div className="text-3xl">{b.icon}</div>
-              <div className="mt-1 truncate font-display text-xs font-bold">{b.name}</div>
-              <div className="mt-0.5 truncate text-[10px] text-muted-foreground">{b.desc}</div>
+      <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+        {menu.map((m, i) => {
+          const Icon = m.icon;
+          const inner = (
+            <div className={"flex items-center gap-3 p-3 " + (i > 0 ? "border-t border-border" : "")}>
+              <span className="grid h-9 w-9 place-items-center rounded-xl bg-muted text-muted-foreground"><Icon className="h-4 w-4" /></span>
+              <span className="flex-1 text-sm font-semibold">{m.label}</span>
+              <ChevronRight className="h-4 w-4 text-muted-foreground" />
             </div>
-          ))}
-        </div>
-      </section>
+          );
+          return "to" in m && m.to ? (
+            <Link key={m.label} to={m.to}>{inner}</Link>
+          ) : (
+            <button key={m.label} onClick={m.action} className="block w-full text-left">{inner}</button>
+          );
+        })}
+      </div>
 
-      {/* Rankings */}
-      <section>
-        <SectionTitle title="Global rankings" action={<span className="text-xs font-semibold text-primary">Top 0.5%</span>} />
-        <div className="overflow-hidden rounded-2xl border border-border bg-surface">
-          {playerLeaderboard.map((p, i) => (
-            <div key={p.rank} className={"flex items-center gap-3 p-3 " + (i > 0 ? "border-t border-border" : "") + (p.name === currentUser.name ? " bg-primary/5" : "")}>
-              <span className="grid h-7 w-7 place-items-center rounded-full bg-muted font-display text-xs font-bold">{p.rank}</span>
-              <Avatar initials={p.avatar} />
-              <div className="min-w-0 flex-1">
-                <div className="truncate text-sm font-semibold">{p.name}</div>
-                <div className="truncate text-[11px] text-muted-foreground">{p.team}</div>
-              </div>
-              <span className="font-mono text-xs font-bold">{p.rating}</span>
-            </div>
-          ))}
-        </div>
-      </section>
+      <button
+        onClick={() => toast.success("Signed out")}
+        className="flex w-full items-center justify-center gap-2 rounded-full border border-border bg-surface py-3 text-sm font-semibold text-muted-foreground"
+      >
+        <LogOut className="h-4 w-4" /> Sign out
+      </button>
+      <div className="text-center text-[10px] text-muted-foreground">v2.0 · Football Hub</div>
+
+      {/* silence unused */}
+      <Wallet className="hidden" />
     </div>
   );
 }

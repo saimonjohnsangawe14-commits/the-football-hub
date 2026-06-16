@@ -9,66 +9,12 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TournamentsRouteImport } from './routes/tournaments'
-import { Route as TeamsRouteImport } from './routes/teams'
 import { Route as ProfileRouteImport } from './routes/profile'
-import { Route as MatchesRouteImport } from './routes/matches'
-import { Route as MarketplaceRouteImport } from './routes/marketplace'
-import { Route as FoodRouteImport } from './routes/food'
-import { Route as CorporateRouteImport } from './routes/corporate'
-import { Route as BookRouteImport } from './routes/book'
-import { Route as AdminRouteImport } from './routes/admin'
-import { Route as AcademyRouteImport } from './routes/academy'
 import { Route as IndexRouteImport } from './routes/index'
 
-const TournamentsRoute = TournamentsRouteImport.update({
-  id: '/tournaments',
-  path: '/tournaments',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TeamsRoute = TeamsRouteImport.update({
-  id: '/teams',
-  path: '/teams',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MatchesRoute = MatchesRouteImport.update({
-  id: '/matches',
-  path: '/matches',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MarketplaceRoute = MarketplaceRouteImport.update({
-  id: '/marketplace',
-  path: '/marketplace',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FoodRoute = FoodRouteImport.update({
-  id: '/food',
-  path: '/food',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CorporateRoute = CorporateRouteImport.update({
-  id: '/corporate',
-  path: '/corporate',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BookRoute = BookRouteImport.update({
-  id: '/book',
-  path: '/book',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AcademyRoute = AcademyRouteImport.update({
-  id: '/academy',
-  path: '/academy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -79,170 +25,37 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/academy': typeof AcademyRoute
-  '/admin': typeof AdminRoute
-  '/book': typeof BookRoute
-  '/corporate': typeof CorporateRoute
-  '/food': typeof FoodRoute
-  '/marketplace': typeof MarketplaceRoute
-  '/matches': typeof MatchesRoute
   '/profile': typeof ProfileRoute
-  '/teams': typeof TeamsRoute
-  '/tournaments': typeof TournamentsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/academy': typeof AcademyRoute
-  '/admin': typeof AdminRoute
-  '/book': typeof BookRoute
-  '/corporate': typeof CorporateRoute
-  '/food': typeof FoodRoute
-  '/marketplace': typeof MarketplaceRoute
-  '/matches': typeof MatchesRoute
   '/profile': typeof ProfileRoute
-  '/teams': typeof TeamsRoute
-  '/tournaments': typeof TournamentsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/academy': typeof AcademyRoute
-  '/admin': typeof AdminRoute
-  '/book': typeof BookRoute
-  '/corporate': typeof CorporateRoute
-  '/food': typeof FoodRoute
-  '/marketplace': typeof MarketplaceRoute
-  '/matches': typeof MatchesRoute
   '/profile': typeof ProfileRoute
-  '/teams': typeof TeamsRoute
-  '/tournaments': typeof TournamentsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/academy'
-    | '/admin'
-    | '/book'
-    | '/corporate'
-    | '/food'
-    | '/marketplace'
-    | '/matches'
-    | '/profile'
-    | '/teams'
-    | '/tournaments'
+  fullPaths: '/' | '/profile'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/academy'
-    | '/admin'
-    | '/book'
-    | '/corporate'
-    | '/food'
-    | '/marketplace'
-    | '/matches'
-    | '/profile'
-    | '/teams'
-    | '/tournaments'
-  id:
-    | '__root__'
-    | '/'
-    | '/academy'
-    | '/admin'
-    | '/book'
-    | '/corporate'
-    | '/food'
-    | '/marketplace'
-    | '/matches'
-    | '/profile'
-    | '/teams'
-    | '/tournaments'
+  to: '/' | '/profile'
+  id: '__root__' | '/' | '/profile'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AcademyRoute: typeof AcademyRoute
-  AdminRoute: typeof AdminRoute
-  BookRoute: typeof BookRoute
-  CorporateRoute: typeof CorporateRoute
-  FoodRoute: typeof FoodRoute
-  MarketplaceRoute: typeof MarketplaceRoute
-  MatchesRoute: typeof MatchesRoute
   ProfileRoute: typeof ProfileRoute
-  TeamsRoute: typeof TeamsRoute
-  TournamentsRoute: typeof TournamentsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/tournaments': {
-      id: '/tournaments'
-      path: '/tournaments'
-      fullPath: '/tournaments'
-      preLoaderRoute: typeof TournamentsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/teams': {
-      id: '/teams'
-      path: '/teams'
-      fullPath: '/teams'
-      preLoaderRoute: typeof TeamsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/profile': {
       id: '/profile'
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof ProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/matches': {
-      id: '/matches'
-      path: '/matches'
-      fullPath: '/matches'
-      preLoaderRoute: typeof MatchesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/marketplace': {
-      id: '/marketplace'
-      path: '/marketplace'
-      fullPath: '/marketplace'
-      preLoaderRoute: typeof MarketplaceRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/food': {
-      id: '/food'
-      path: '/food'
-      fullPath: '/food'
-      preLoaderRoute: typeof FoodRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/corporate': {
-      id: '/corporate'
-      path: '/corporate'
-      fullPath: '/corporate'
-      preLoaderRoute: typeof CorporateRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/book': {
-      id: '/book'
-      path: '/book'
-      fullPath: '/book'
-      preLoaderRoute: typeof BookRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/academy': {
-      id: '/academy'
-      path: '/academy'
-      fullPath: '/academy'
-      preLoaderRoute: typeof AcademyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -257,27 +70,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AcademyRoute: AcademyRoute,
-  AdminRoute: AdminRoute,
-  BookRoute: BookRoute,
-  CorporateRoute: CorporateRoute,
-  FoodRoute: FoodRoute,
-  MarketplaceRoute: MarketplaceRoute,
-  MatchesRoute: MatchesRoute,
   ProfileRoute: ProfileRoute,
-  TeamsRoute: TeamsRoute,
-  TournamentsRoute: TournamentsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
